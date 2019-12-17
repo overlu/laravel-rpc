@@ -1,0 +1,23 @@
+{
+    "name": "overlu/laravel-rpc",
+    "description": "laravel rpc driver module, simple and easy to use",
+    "type": "library",
+    "authors": [
+        {
+            "name": "lupeng",
+            "email": "lupeng.me@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Overlu\\Rpc\\": "src/"
+        }
+    },
+    "require": {
+        "pda/pheanstalk": "^4.0",
+        "hprose/hprose": "^2.0",
+        "ext-curl": "*",
+        "ext-json": "*",
+        "guzzlehttp/guzzle": "^6.4"
+    }
+}
