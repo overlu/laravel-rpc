@@ -25,8 +25,7 @@ trait Module
     /**
      * @param $method
      * @param $arguments
-     * @return string
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @return bool
      */
     public function __call($method, $arguments)
     {
