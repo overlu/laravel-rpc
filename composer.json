@@ -19,5 +19,12 @@
         "ext-curl": "*",
         "ext-json": "*",
         "guzzlehttp/guzzle": "^6.4"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Overlu\\Rpc\\RpcServiceProvider"
+            ]
+        }
     }
 }
