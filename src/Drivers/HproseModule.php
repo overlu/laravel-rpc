@@ -41,7 +41,10 @@ class HproseModule
         $this->response_data = ($this->response_data instanceof Future)
             ? $this->response_data->done(function ($data) use ($request_data) {
                 $method = '_' . $request_data['from']['method'];
-                (new $request_data['from']['path'])->$method($data);
+                $obj = new $request_data['from']['path'];
+                if (method_exists($obj, $method)) {
+                    $obj->$method($data);
+                }
             }) : $this->response_data;
         return $this->response();
     }

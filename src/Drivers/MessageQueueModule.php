@@ -43,6 +43,7 @@ class MessageQueueModule
     public function call(array $request_data = [])
     {
         $request_data = empty($request_data) ? $this->request_data : $request_data;
+        $request_data['class_params'] = $this->class_params;
         $this->server->useTube(isset($request_data['to']['module']) ? $this->tube_prefix . '_' . $request_data['to']['module'] : $this->tube_prefix);
         $this->response_data = $this->server->put(json_encode($request_data, JSON_UNESCAPED_UNICODE));
         return $this->response();
@@ -96,7 +97,7 @@ class MessageQueueModule
             if (!class_exists($data['to']['path'])) {
                 throw new RpcException(RpcCode::RPC_CLASS_NOT_EXIST);
             }
-            $instance = (new \ReflectionClass($data['to']['path']))->newInstance();
+            $instance = (new \ReflectionClass($data['to']['path']))->newInstance(...$data['class_params']);
             $method = $data['to']['method'];
             if (!method_exists($instance, $method)) {
                 throw new RpcException(RpcCode::RPC_METHOD_NOT_EXIST);
@@ -143,6 +144,7 @@ class MessageQueueModule
         $data['temp'] = $data['to'];
         $data['to'] = $data['from'];
         $data['from'] = $data['temp'];
+        $data['class_params'] = [];
         unset($data['temp']);
         return $data;
     }
