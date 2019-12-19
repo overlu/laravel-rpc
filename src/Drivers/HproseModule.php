@@ -73,7 +73,7 @@ class HproseModule
         if (!class_exists($data['to']['path'])) {
             throw new RpcException(RpcCode::RPC_CLASS_NOT_EXIST);
         }
-        $instance = (new \ReflectionClass($data['to']['path']))->newInstance($class_params);
+        $instance = (new \ReflectionClass($data['to']['path']))->newInstance(...$class_params);
         $method = $data['to']['method'];
         if (!method_exists($instance, $method)) {
             throw new RpcException(RpcCode::RPC_METHOD_NOT_EXIST);
