@@ -31,6 +31,7 @@ class ApiModule
     public function call(array $request_data = [])
     {
         $request_data = empty($request_data) ? $this->request_data : $request_data;
+        $request_data['class_params'] = $this->class_params;
         $this->getHost();
         $result = (new Client([
             'timeout' => 5.0
@@ -55,7 +56,7 @@ class ApiModule
         if (!class_exists($data['to']['path'])) {
             throw new RpcException(RpcCode::RPC_CLASS_NOT_EXIST);
         }
-        $instance = (new \ReflectionClass($data['to']['path']))->newInstance(...$this->class_params);
+        $instance = (new \ReflectionClass($data['to']['path']))->newInstance(...$data['class_params']);
         $method = $data['to']['method'];
         if (!method_exists($instance, $method)) {
             throw new RpcException(RpcCode::RPC_METHOD_NOT_EXIST);

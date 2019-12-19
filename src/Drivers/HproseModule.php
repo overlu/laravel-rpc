@@ -37,7 +37,7 @@ class HproseModule
         $async = $request_data['to']['async'] ?? false;
         $this->getHost();
         $this->client = Client::create($this->moduleHost, $async);
-        $this->response_data = $this->client->proxy($request_data);
+        $this->response_data = $this->client->proxy($request_data, $this->class_params);
         $this->response_data = ($this->response_data instanceof Future)
             ? $this->response_data->done(function ($data) use ($request_data) {
                 $method = '_' . $request_data['from']['method'];
@@ -61,18 +61,19 @@ class HproseModule
     /**
      * 代理
      * @param array $data
+     * @param array $class_params
      * @return mixed
      * @throws RpcException
      * @throws \ReflectionException
      */
-    public function proxy($data = [])
+    public function proxy($data = [], $class_params = [])
     {
         $data = $data ?: $this->request_data;
         $data['to']['params'] = $data['to']['params'] ?? [];
         if (!class_exists($data['to']['path'])) {
             throw new RpcException(RpcCode::RPC_CLASS_NOT_EXIST);
         }
-        $instance = (new \ReflectionClass($data['to']['path']))->newInstance(...$this->class_params);
+        $instance = (new \ReflectionClass($data['to']['path']))->newInstance($class_params);
         $method = $data['to']['method'];
         if (!method_exists($instance, $method)) {
             throw new RpcException(RpcCode::RPC_METHOD_NOT_EXIST);

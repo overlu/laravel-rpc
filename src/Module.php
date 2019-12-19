@@ -12,20 +12,25 @@ trait Module
     public static $request_data2 = [];
     public $response_data = [];
     public $class_params = [];
+    public static $class_params2 = [];
     public $driver_name;
+    public static $driver_name2;
 
     public function __construct($module = [], $params = [], $driver = '')
     {
         $this->request_data = $module;
         self::$request_data2 = $module;
         $this->class_params = $params;
+        self::$class_params2 = $params;
         $this->driver_name = $driver;
+        self::$driver_name2 = $driver;
     }
 
     /**
      * @param $method
      * @param $arguments
-     * @return bool
+     * @return string
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function __call($method, $arguments)
     {
@@ -47,7 +52,7 @@ trait Module
         self::$request_data2['to']['method'] = $method;
         self::$request_data2['to']['params'] = $arguments;
         self::$request_data2['to']['type'] = '::';
-        $instance = static::getQueueInstance(self::$request_data2);
+        $instance = static::getQueueInstance(self::$request_data2, self::$class_params2, self::$driver_name2);
 
         return $instance->call();
     }
