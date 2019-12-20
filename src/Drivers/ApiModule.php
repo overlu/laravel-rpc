@@ -53,14 +53,15 @@ class ApiModule
     {
         $data = $data ?: (request()->input() ?: $this->request_data);
         $data['to']['params'] = $data['to']['params'] ?? [];
-        if (!class_exists($data['to']['path'])) {
+        $data['class_params'] = $data['class_params'] ?? [];
+        /*if (!class_exists($data['to']['path'])) {
             throw new RpcException(RpcCode::RPC_CLASS_NOT_EXIST);
-        }
+        }*/
         $instance = (new \ReflectionClass($data['to']['path']))->newInstance(...$data['class_params']);
         $method = $data['to']['method'];
-        if (!method_exists($instance, $method)) {
+        /*if (!method_exists($instance, $method)) {
             throw new RpcException(RpcCode::RPC_METHOD_NOT_EXIST);
-        }
+        }*/
         return $data['to']['type'] !== '::'
             ? (isset($data['to']['app_id'])
                 ? $instance->$method($data['to']['params'])

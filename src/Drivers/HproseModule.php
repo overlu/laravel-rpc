@@ -73,14 +73,14 @@ class HproseModule
     {
         $data = $data ?: $this->request_data;
         $data['to']['params'] = $data['to']['params'] ?? [];
-        if (!class_exists($data['to']['path'])) {
+        /*if (!class_exists($data['to']['path'])) {
             throw new RpcException(RpcCode::RPC_CLASS_NOT_EXIST);
-        }
+        }*/
         $instance = (new \ReflectionClass($data['to']['path']))->newInstance(...$class_params);
         $method = $data['to']['method'];
-        if (!method_exists($instance, $method)) {
+        /*if (!method_exists($instance, $method)) {
             throw new RpcException(RpcCode::RPC_METHOD_NOT_EXIST);
-        }
+        }*/
         return $data['to']['type'] !== '::'
             ? $instance->$method(...$data['to']['params'])
             : $instance::$method(...$data['to']['params']);

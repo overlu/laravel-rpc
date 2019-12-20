@@ -40,13 +40,13 @@ class LocalClassModule
      */
     public function __call($method, $arguments)
     {
-        if (!class_exists($this->path)) {
+        /*if (!class_exists($this->path)) {
             throw new RpcException(RpcCode::RPC_CLASS_NOT_EXIST);
-        }
+        }*/
         $module = new $this->path(...$this->class_params);
-        if (!method_exists($module, $method)) {
+        /*if (!method_exists($module, $method)) {
             throw new RpcException(RpcCode::RPC_METHOD_NOT_EXIST);
-        }
+        }*/
         return $module->$method(...$arguments);
     }
 
