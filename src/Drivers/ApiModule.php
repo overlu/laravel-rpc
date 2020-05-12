@@ -32,7 +32,7 @@ class ApiModule
     {
         $request_data = empty($request_data) ? $this->request_data : $request_data;
         $request_data['class_params'] = $this->class_params;
-        $this->getHost();
+        config('rpc.use_nacos') ? $this->getHostByNacos() : $this->getHost();
         $result = (new Client([
             'timeout' => 5.0
         ]))->request('POST', $this->moduleHost, [
@@ -78,14 +78,24 @@ class ApiModule
     public function getHost()
     {
         $module = $this->request_data['to']['module'];
-        $apiHosts = config('module.api');
-        $moduleHosts = [];
-        foreach ($apiHosts as $host => $modules) {
-            if (in_array($module, $modules)) {
-                $moduleHosts[] = $host;
-            }
+        $moduleHosts = explode(',', config('module.hosts.' . $module, ''));
+        $moduleHost = count($moduleHosts) > 1 ? Arr::random($moduleHosts) : $moduleHosts[0];
+        $this->moduleHost = 'http://' . $moduleHost . '/overlu/rpc/api';
+        return $this->moduleHost;
+    }
+
+    /**
+     * 获取nacos服务地址
+     * @return string
+     * @throws RpcException
+     */
+    public function getHostByNacos()
+    {
+        if (!class_exists('\\Overlu\\Reget\\Reget')) {
+            throw new RpcException(RpcCode::RPC_LARAVEL_REGET_NOT_EXISTS);
         }
-        $this->moduleHost = 'http://' . Arr::random($moduleHosts) . '/overlu/rpc/api';
+        $moduleHost = \Overlu\Reget\Reget::getInstance()->service($this->request_data['to']['module']);
+        $this->moduleHost = 'http://' . $moduleHost . '/overlu/rpc/api';
         return $this->moduleHost;
     }
 }

@@ -37,6 +37,19 @@ class Status extends Command
      */
     public function handle()
     {
+        dd(json_encode([
+            'mapping' => [
+                'Log' => '\\App\\RpcTest\\Log',
+                'SMS' => '\\App\\RpcTest\\SMS',
+                'News' => '\\App\\RpcTest\\News',
+            ],
+'registration' => [
+        'local' => ['Log'],
+        'mq' => ['SMS'],
+        'rpc' => [],
+        'api' => ['News'],
+    ]
+        ]));
         $server = $this->argument('server');
         try {
             switch ($server) {

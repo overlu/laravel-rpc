@@ -55,18 +55,23 @@ return [
     ],
 
     /**
-     * 驱动: rpc,mq,api,local(default)
-     * 配置rpc和api服务地址不需要加schema，例如http,tcp
+     * 配置beanstalkd
      */
-    'driver_config' => [
-        'local' => [],
-        'mq' => [
-            'host' => '127.0.0.1',
-            'port' => '11300',
-            'channel' => 'Lrpc_uDi7q',
-            'username' => '',
-            'password' => '',
-        ],
-        'rpc_port' => 1314,
+    'beanstalkd' => [
+        'host' => '127.0.0.1',
+        'port' => '11300',
+        'channel' => 'Lrpc_uDi7q',
+        'username' => '',
+        'password' => '',
     ],
+
+    /**
+     * rpc服务端口
+     */
+    'port' => 1314,
+
+    /**
+     * 是否使用nacos服务
+     */
+    'use_nacos' => false,
 ];

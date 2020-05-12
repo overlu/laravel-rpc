@@ -81,7 +81,10 @@ trait Module
         return $this->response_data;
     }
 
-    private function syslog()
+    /**
+     * write rpc log
+     */
+    private function syslog(): void
     {
         if (config('rpc.log_info')) {
             $request = request();

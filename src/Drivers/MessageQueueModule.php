@@ -31,7 +31,7 @@ class MessageQueueModule
         self::$request_data2 = $module;
         $this->class_params = $params;
         $this->driver_name = $driver;
-        $this->tube_prefix = config('rpc.driver_config.mq.channel');
+        $this->tube_prefix = config('rpc.beanstalkd.channel');
         $this->connect();
     }
 
@@ -56,7 +56,7 @@ class MessageQueueModule
     private function connect()
     {
         try {
-            $this->server = Pheanstalk::create(config('rpc.driver_config.mq.host', '127.0.0.1'), config('rpc.driver_config.mq.port', '11300'));
+            $this->server = Pheanstalk::create(config('rpc.beanstalkd.host', '127.0.0.1'), config('rpc.beanstalkd.port', '11300'));
         } catch (\Exception $exception) {
             throw new RpcException([
                 $exception->getCode(), $exception->getMessage()
@@ -81,7 +81,7 @@ class MessageQueueModule
             $this->server->delete($job);
             $this->watch();
         } else {
-            Log::error('host: ' . config('rpc.driver_config.mq.host', '127.0.0.1') . ', reserve false');
+            Log::error('host: ' . config('rpc.beanstalkd.host', '127.0.0.1') . ', reserve false');
         }
     }
 

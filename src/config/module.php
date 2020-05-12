@@ -5,44 +5,42 @@
 return [
     /**
      * Module Mapping
-     * Module Name => NameSpace\\Module Name
+     * ModuleName => Namespace\\ModuleName
      */
     'mapping' => [
-        'Log' => '\\App\\RpcTest\\Log',
-        'Member' => '\\App\\RpcTest\\Member',
-        'News' => '\\App\\RpcTest\\News',
-        'Live' => '\\App\\RpcTest\\Live',
-        'Auth' => '',
+//        'ModuleName' => 'Namespace\\ModuleName',
     ],
+
+    /**
+     * 默认local驱动
+     */
+    'default_driver' => 'local',
 
     /**
      * module registration center
+     *
      */
     'registration' => [
-        'local' => ['Log', 'Auth'],  // message queue监听使用，判断是否是自身服务
-        'mq' => ['Member'],
-        'rpc' => ['Live'],
-        'api' => ['News'],
-    ],
-
-    /**
-     * rpc服务器模块映射
-     */
-    'rpc' => [
-        'rpc.test' => [
-            'Live'
-        ]
-    ],
-
-    /**
-     * api服务器模块映射
-     */
-    'api' => [
-        'rpc.test' => [
-            'News',
+        'local' => [  // message queue监听使用，判断是否是自身服务
+//            'ModuleName'
         ],
-        'rpc2.test' => [
-            'News2'
-        ]
+        'mq' => [
+//            'ModuleName'
+        ],
+        'rpc' => [
+//            'ModuleName'
+        ],
+        'api' => [
+//            'ModuleName'
+        ],
     ],
+
+    /**
+     * rpc服务地址模块映射
+     * 一个模块对应多个服务地址，使用','隔开
+     */
+    'hosts' => [
+//        'ModuleName' => '127.0.0.1',
+//        'ModuleName2' => '127.0.0.1,127.0.0.2',
+    ]
 ];

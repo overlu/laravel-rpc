@@ -22,5 +22,7 @@ class RpcCode
     const RPC_SERVICE_UNAVAILABLE = [503, 'service unavailable'];
     const RPC_GATEWAY_TIMEOUT = [504, 'gateway timeout'];
 
+    const RPC_LARAVEL_REGET_NOT_EXISTS = [600, "laravel-reget extension not exists. run 'composer require overlu/laravel-reget' first."];
+
 
 }

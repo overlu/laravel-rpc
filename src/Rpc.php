@@ -4,6 +4,7 @@
 namespace Overlu\Rpc;
 
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Overlu\Rpc\Exceptions\RpcException;
 use Overlu\Rpc\Util\Log;
@@ -73,7 +74,7 @@ class Rpc
      */
     private function getDriver($module)
     {
-        $driver_modules = config('module.registration');
+        $driver_modules = Cache::get('module.registration') ?: config('module.registration');
         $driver = '';
         foreach ($driver_modules as $key => $driver_module) {
             if (in_array($module, $driver_module)) {
@@ -82,8 +83,8 @@ class Rpc
             }
         }
         return [
-            'driver' => $this->drivers[$driver] ?? 'LocalClass',
-            'path' => config('module.mapping.' . $module)
+            'driver' => $driver ? $this->drivers[$driver] : $drivers[config('module.default_driver')],
+            'path' => Cache::get('module.mapping')[$module] ?: config('module.mapping.' . $module)
         ];
     }
 }
