@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Peter
- * Date: 2019/11/28
- * Time: 22:18
- */
 
 namespace Overlu\Rpc\Util;
-
 
 class Encrypt
 {
@@ -51,15 +44,15 @@ class Encrypt
         $char = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $nonce = '';
         for ($i = 0; $i < $length; $i++) {
-            $nonce .= $char[mt_rand(0, strlen($char) - 1)];
+            $nonce .= $char[random_int(0, strlen($char) - 1)];
         }
         return $nonce;
     }
 
     /**
      * 生成加密字符串
-     * @param $nonce
-     * @param $timestamp
+     * @param string $nonce
+     * @param int $timestamp
      * @return string
      */
     private static function sha1(string $nonce, int $timestamp): string

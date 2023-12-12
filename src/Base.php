@@ -1,10 +1,9 @@
 <?php
 
-
 namespace Overlu\Rpc;
 
 use Illuminate\Http\Request;
-use Overlu\Rpc\Exceptions\RpcCode;
+use Overlu\Rpc\Exceptions\RPCStatus;
 use Overlu\Rpc\Exceptions\RpcException;
 use Overlu\Rpc\Util\Encrypt;
 use Overlu\Rpc\Util\Signature;
@@ -15,13 +14,13 @@ class Base
      * 驱动
      * @var string
      */
-    public $driver;
+    public $driver = 'local';
 
     /**
      * 模型参数
      * @var
      */
-    public $params;
+    public $params = [];
 
     /**
      * 私钥
@@ -29,7 +28,7 @@ class Base
      */
     protected $key;
 
-    public function __construct(string $driver, array $params)
+    public function __construct(string $driver = 'local', array $params = [])
     {
         $this->driver = $driver;
         $this->params = $params;
@@ -56,7 +55,7 @@ class Base
             ? 'checkSignature'
             : 'checkWhiteIpLists';
         if (!$this->$checkMethod()) {
-            throw new RpcException(RpcCode::RPC_FORBIDDEN);
+            throw new RpcException(RPCStatus::RPC_FORBIDDEN);
         }
         return true;
     }

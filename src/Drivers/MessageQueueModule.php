@@ -6,7 +6,7 @@ namespace Overlu\Rpc\Drivers;
 
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
-use Overlu\Rpc\Exceptions\RpcCode;
+use Overlu\Rpc\Exceptions\RPCStatus;
 use Overlu\Rpc\Exceptions\RpcException;
 use Overlu\Rpc\Module;
 use Overlu\Rpc\Util\Source;
@@ -91,16 +91,16 @@ class MessageQueueModule
      * @throws RpcException
      * @throws \ReflectionException
      */
-    protected function subscribe(array $data)
+    protected function subscribe(array $data): void
     {
         if ($this->checkIsLocal($data)) {
             /*if (!class_exists($data['to']['path'])) {
-                throw new RpcException(RpcCode::RPC_CLASS_NOT_EXIST);
+                throw new RpcException(RPCStatus::RPC_CLASS_NOT_EXIST);
             }*/
             $instance = (new \ReflectionClass($data['to']['path']))->newInstance(...$data['class_params']);
             $method = $data['to']['method'];
             /*if (!method_exists($instance, $method)) {
-                throw new RpcException(RpcCode::RPC_METHOD_NOT_EXIST);
+                throw new RpcException(RPCStatus::RPC_METHOD_NOT_EXIST);
             }*/
             $result = $data['to']['type'] !== '::'
                 ? (isset($data['to']['app_id'])
@@ -124,12 +124,12 @@ class MessageQueueModule
      */
     protected function checkIsLocal(array $data): bool
     {
-        if (isset($data['from']) && isset($data['to'])) {
+        if (isset($data['from'], $data['to'])) {
             if (isset($data['to']['module'])) {
                 return Source::in_local($data['to']['module']);
             }
             if (isset($data['to']['app_id'])) {
-                return Cache::pull($data['to']['app_id']) ? true : false;
+                return (bool)Cache::pull($data['to']['app_id']);
             }
         }
         return false;
@@ -174,7 +174,7 @@ class MessageQueueModule
         return $stats['pid'];
     }
 
-    public function tubes()
+    public function tubes(): array
     {
         $tubes = array_map(function ($tube) {
             return $this->tube_prefix . '_' . $tube;

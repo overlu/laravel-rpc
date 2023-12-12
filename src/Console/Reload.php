@@ -60,6 +60,5 @@ class Reload extends Command
             $this->error("restart server [{$server}] failed. error message: " . $exception->getMessage() . ', on file: ' . $exception->getFile() . ', at line: ' . $exception->getLine());
             $this->handle();
         }
-
     }
 }

@@ -15,7 +15,7 @@ use Hprose\Socket\Server;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use Overlu\Rpc\Exceptions\RpcCode;
+use Overlu\Rpc\Exceptions\RPCStatus;
 use Overlu\Rpc\Exceptions\RpcException;
 use Overlu\Rpc\Module;
 
@@ -75,12 +75,12 @@ class HproseModule
         $data = $data ?: $this->request_data;
         $data['to']['params'] = $data['to']['params'] ?? [];
         /*if (!class_exists($data['to']['path'])) {
-            throw new RpcException(RpcCode::RPC_CLASS_NOT_EXIST);
+            throw new RpcException(RPCStatus::RPC_CLASS_NOT_EXIST);
         }*/
         $instance = (new \ReflectionClass($data['to']['path']))->newInstance(...$class_params);
         $method = $data['to']['method'];
         /*if (!method_exists($instance, $method)) {
-            throw new RpcException(RpcCode::RPC_METHOD_NOT_EXIST);
+            throw new RpcException(RPCStatus::RPC_METHOD_NOT_EXIST);
         }*/
         return $data['to']['type'] !== '::'
             ? $instance->$method(...$data['to']['params'])
@@ -108,7 +108,7 @@ class HproseModule
     public function getHostByNacos()
     {
         if (!class_exists('\\Overlu\\Reget\\Reget')) {
-            throw new RpcException(RpcCode::RPC_LARAVEL_REGET_NOT_EXISTS);
+            throw new RpcException(RPCStatus::RPC_LARAVEL_REGET_NOT_EXISTS);
         }
         $moduleHost = \Overlu\Reget\Reget::getInstance()->service($this->request_data['to']['module']);
         $this->moduleHost = 'tcp://' . (Str::contains($moduleHost, ':') ? $moduleHost : $moduleHost . ':' . config('rpc.port'));

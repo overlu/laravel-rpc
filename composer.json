@@ -13,12 +13,10 @@
             "Overlu\\Rpc\\": "src/"
         }
     },
-    "require": {
+    "require-dev": {
         "pda/pheanstalk": "^4.0",
         "hprose/hprose": "^2.0",
-        "ext-curl": "*",
-        "ext-json": "*",
-        "guzzlehttp/guzzle": "^6.4"
+        "guzzlehttp/guzzle": "^6.4|^7.0"
     },
     "extra": {
         "laravel": {

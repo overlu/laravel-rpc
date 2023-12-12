@@ -15,8 +15,8 @@ class RpcHandler extends Handler
         // rpc接口主动抛出的异常
         if ($exception instanceof RpcException) {
             $code = $exception->getCode();
-            $code = (!$code || $code < 0) ? RpcCode::RPC_UNKNOWN_ERROR[0] : $code;
-            $msg = $exception->getMessage() ?: RpcCode::RPC_UNKNOWN_ERROR[1];
+            $code = (!$code || $code < 0) ? RPCStatus::RPC_UNKNOWN_ERROR[0] : $code;
+            $msg = $exception->getMessage() ?: RPCStatus::RPC_UNKNOWN_ERROR[1];
             // 异常返回
             return response()->json([
                 'error' => true,

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Overlu\Rpc;
-
 
 use Overlu\Rpc\Util\Log;
 

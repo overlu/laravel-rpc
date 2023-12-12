@@ -4,7 +4,7 @@
 namespace Overlu\Rpc\Drivers;
 
 
-use Overlu\Rpc\Exceptions\RpcCode;
+use Overlu\Rpc\Exceptions\RPCStatus;
 use Overlu\Rpc\Exceptions\RpcException;
 
 class LocalClassModule
@@ -41,11 +41,11 @@ class LocalClassModule
     public function __call($method, $arguments)
     {
         /*if (!class_exists($this->path)) {
-            throw new RpcException(RpcCode::RPC_CLASS_NOT_EXIST);
+            throw new RpcException(RPCStatus::RPC_CLASS_NOT_EXIST);
         }*/
         $module = new $this->path(...$this->class_params);
         /*if (!method_exists($module, $method)) {
-            throw new RpcException(RpcCode::RPC_METHOD_NOT_EXIST);
+            throw new RpcException(RPCStatus::RPC_METHOD_NOT_EXIST);
         }*/
         return $module->$method(...$arguments);
     }
@@ -59,11 +59,11 @@ class LocalClassModule
     public static function __callStatic($method, $arguments)
     {
         if (!class_exists(self::$path2)) {
-            throw new RpcException(RpcCode::RPC_CLASS_NOT_EXIST);
+            throw new RpcException(RPCStatus::RPC_CLASS_NOT_EXIST);
         }
         $module = new self::$path2;
         if (!method_exists($module, $method)) {
-            throw new RpcException(RpcCode::RPC_METHOD_NOT_EXIST);
+            throw new RpcException(RPCStatus::RPC_METHOD_NOT_EXIST);
         }
         return $module::$method(...$arguments);
     }

@@ -2,6 +2,7 @@
 
 namespace Overlu\Rpc\Console;
 
+use Exception;
 use Illuminate\Console\Command;
 use Overlu\Rpc\Servers\HproseServer;
 use Overlu\Rpc\Servers\MessageQueueServer;
@@ -37,19 +38,6 @@ class Status extends Command
      */
     public function handle()
     {
-        dd(json_encode([
-            'mapping' => [
-                'Log' => '\\App\\RpcTest\\Log',
-                'SMS' => '\\App\\RpcTest\\SMS',
-                'News' => '\\App\\RpcTest\\News',
-            ],
-'registration' => [
-        'local' => ['Log'],
-        'mq' => ['SMS'],
-        'rpc' => [],
-        'api' => ['News'],
-    ]
-        ]));
         $server = $this->argument('server');
         try {
             switch ($server) {
@@ -64,7 +52,7 @@ class Status extends Command
                     $this->error("server [{$server}] not exist.");
                     return;
             }
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $this->error("something error. message: " . $exception->getMessage() . ', on file: ' . $exception->getFile() . ', at line: ' . $exception->getLine());
         }
 

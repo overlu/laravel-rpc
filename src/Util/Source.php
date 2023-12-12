@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Overlu\Rpc\Util;
-
 
 class Source
 {
@@ -11,7 +9,7 @@ class Source
         return (new \Exception())->getTrace()[3][$type];
     }
 
-    public static function from()
+    public static function from(): array
     {
         $temp = (new \Exception())->getTrace()[3];
         return [
@@ -27,7 +25,7 @@ class Source
     /**
      * @return int
      */
-    public static function app_id()
+    public static function app_id(): int
     {
         $app_id = SnowFlake::make(1, 1);
         \Cache::add($app_id, 1, 5);
@@ -38,8 +36,8 @@ class Source
      * @param $module
      * @return bool
      */
-    public static function in_local($module)
+    public static function in_local($module): bool
     {
-        return in_array($module, config('module.registration.local'));
+        return in_array($module, config('module.registration.local'), true);
     }
 }

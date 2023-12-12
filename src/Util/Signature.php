@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Overlu\Rpc\Util;
-
 
 use Illuminate\Support\Facades\Cache;
 

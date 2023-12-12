@@ -2,6 +2,7 @@
 
 namespace Overlu\Rpc\Console;
 
+use Exception;
 use Illuminate\Console\Command;
 use Overlu\Rpc\Servers\HproseServer;
 use Overlu\Rpc\Servers\MessageQueueServer;
@@ -54,7 +55,7 @@ class Stop extends Command
                     $this->error("server [{$server}] not exist.");
                     return;
             }
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $this->error("stop server [{$server}] failed. error message: " . $exception->getMessage() . ', on file: ' . $exception->getFile() . ', at line: ' . $exception->getLine());
         }
 

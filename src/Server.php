@@ -22,14 +22,16 @@ class Server
      */
     protected function demonize()
     {
-        if (php_sapi_name() != 'cli') {
+        if (php_sapi_name() !== 'cli') {
             exit('should run in cli');
         }
         // 创建子进程
         $pid = pcntl_fork();
-        if ($pid == -1) {
+        if ($pid === -1) {
             exit('fork failed');
-        } elseif ($pid > 0) {
+        }
+
+        if ($pid > 0) {
             // 终止父进程
             exit($pid);
         }
@@ -40,9 +42,11 @@ class Server
         // 改变工作目录
         chdir('/');
         $pid = pcntl_fork();
-        if ($pid == -1) {
+        if ($pid === -1) {
             exit('fork failed');
-        } elseif ($pid) {
+        }
+
+        if ($pid) {
             //  再一次退出父进程，子进程成为最终的守护进程
             exit(0);
         }
@@ -79,18 +83,18 @@ class Server
         if (!file_exists($this->pidFile)) {
             return 0;
         }
-        $pid = intval(file_get_contents($this->pidFile));
+        $pid = (int)file_get_contents($this->pidFile);
+        unlink($this->pidFile);
         if (posix_kill($pid, SIG_DFL)) {
             return $pid;
         }
-        unlink($this->pidFile);
         return 0;
     }
 
     /**
      * 判断pcntl拓展
      */
-    protected function checkPcntl()
+    protected function checkPcntl(): void
     {
         !function_exists('pcntl_signal') && Command::error('php pcntl extension not exist!');
     }

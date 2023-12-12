@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Overlu\Rpc\Facades;
-
 
 use Illuminate\Support\Facades\Facade;
 

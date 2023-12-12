@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Overlu\Rpc\Servers;
-
 
 use Overlu\Rpc\Drivers\HproseModule;
 use Overlu\Rpc\Server;

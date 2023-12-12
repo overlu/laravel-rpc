@@ -18,19 +18,20 @@ class SnowFlake
      * @return int 分布式ID
      * @author : evalor <master@evalor.cn>
      */
-    static function make($dataCenterID = 0, $workerID = 0)
+    static function make(int $dataCenterID = 0, int $workerID = 0)
     {
         // 41bit timestamp + 5bit dataCenter + 5bit worker + 12bit
         $timestamp = self::timeGen();
         if (self::$lastTimestamp == $timestamp) {
             self::$lastSequence = (self::$lastSequence + 1) & self::$sequenceMask;
-            if (self::$lastSequence == 0) $timestamp = self::tilNextMillis(self::$lastTimestamp);
+            if (self::$lastSequence === 0) {
+                $timestamp = self::tilNextMillis(self::$lastTimestamp);
+            }
         } else {
             self::$lastSequence = 0;
         }
         self::$lastTimestamp = $timestamp;
-        $snowFlakeId = (($timestamp - self::$twepoch) << 22) | ($dataCenterID << 17) | ($workerID << 12) | self::$lastSequence;
-        return $snowFlakeId;
+        return (($timestamp - self::$twepoch) << 22) | ($dataCenterID << 17) | ($workerID << 12) | self::$lastSequence;
     }
 
     /**
@@ -39,7 +40,7 @@ class SnowFlake
      * @return \stdClass
      * @author : evalor <master@evalor.cn>
      */
-    static function unmake($snowFlakeId)
+    public static function unmake($snowFlakeId): \stdClass
     {
         $Binary = str_pad(decbin($snowFlakeId), 64, '0', STR_PAD_LEFT);
         $Object = new \stdClass;
@@ -56,7 +57,7 @@ class SnowFlake
      * @return float
      * @author : evalor <master@evalor.cn>
      */
-    private static function tilNextMillis($lastTimestamp)
+    private static function tilNextMillis($lastTimestamp): float
     {
         $timestamp = self::timeGen();
         while ($timestamp <= $lastTimestamp) {
@@ -70,7 +71,7 @@ class SnowFlake
      * @return float
      * @author : evalor <master@evalor.cn>
      */
-    private static function timeGen()
+    private static function timeGen(): float
     {
         return (float)sprintf('%.0f', microtime(true) * 1000);
     }

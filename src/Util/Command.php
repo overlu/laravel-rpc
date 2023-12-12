@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Overlu\Rpc\Util;
-
 
 class Command
 {
@@ -13,8 +11,7 @@ class Command
     public static function pid(string $process): array
     {
         $result = static::exec("ps -ef | grep '" . $process . "' | grep -v grep | awk '{print $2}'");
-        $pids = array_filter(explode(',', str_replace("\n", ',', $result)));
-        return $pids;
+        return array_filter(explode(',', str_replace("\n", ',', $result)));
     }
 
     /**
@@ -28,7 +25,7 @@ class Command
     /**
      * 执行shell脚本
      * @param string $shell
-     * @return string|null
+     * @return false|string|null
      */
     public static function exec(string $shell)
     {
@@ -40,8 +37,7 @@ class Command
      */
     public static function kill(string $process): void
     {
-        $pids = static::pid($process);
-        if (!empty($pids)) {
+        if ($pids = static::pid($process)) {
             foreach ($pids as $pid) {
                 static::exec('kill -9 ' . $pid);
             }
@@ -52,7 +48,7 @@ class Command
      * print info message
      * @param $message
      */
-    public static function info($message)
+    public static function info($message): void
     {
         static::out($message, 'success');
     }
@@ -61,7 +57,7 @@ class Command
      * print error message
      * @param $message
      */
-    public static function error($message)
+    public static function error($message): void
     {
         static::out($message, 'error');
     }
@@ -70,7 +66,7 @@ class Command
      * print warning message
      * @param $message
      */
-    public static function warning($message)
+    public static function warning($message): void
     {
         static::out($message, 'warning');
     }
@@ -79,23 +75,23 @@ class Command
      * print default message
      * @param $message
      */
-    public static function line($message)
+    public static function line($message): void
     {
         static::out($message);
     }
 
-    public static function suggest($message)
+    public static function suggest($message): void
     {
         static::out($message, 'suggest');
     }
 
     /**
      * print message
-     * @param $message
-     * @param null $style
+     * @param string $message
+     * @param string $style
      * @param bool $newLine
      */
-    public static function out($message, $style = null, $newLine = true)
+    public static function out(string $message, string $style = 'null', bool $newLine = true): void
     {
         $styles = [
             'success' => "\033[0;32m%s\033[0m",
